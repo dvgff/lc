@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.module.lc_module.Asian.services.domain.dao.QueryPageDao">
+                                                                                                                        <sql id="Base_Column_List">
+                                                                                                                                                                                                                                                                                                                                                lc_page.id, lc_page.page_name AS pageName, lc_page.module_id AS moduleId
+    </sql>
+
+    
+    
+    <select id="queryMasterModel" resultType="PageModel">
+       SELECT lc_page.*
+       FROM lc_page
+       WHERE lc_page.id=#{id}
+       GROUP BY lc_page.id
+    </select>
+
+
+
+            
+    <select id="findPagePage" resultType="PageRecord" parameterType="PageRecord">
+            SELECT <include refid="Base_Column_List"/>
+
+        
+
+        FROM lc_page
+
+        
+        
+        WHERE 1=1
+        
+
+        
+                                                                            <if test="record.id != null and record.id>0 ">
+                                    AND lc_page.id LIKE CONCAT('%',#{record.id},'%')
+                            </if>
+                                                                    
+
+                                                                                        <if test="record.pageName != null and record.pageName!= ''">
+                                    AND lc_page.page_name LIKE CONCAT('%',#{record.pageName},'%')
+                            </if>
+                                                                    
+
+                                                                                        <if test="record.moduleId != null and record.moduleId>0 ">
+                                    AND lc_page.module_id LIKE CONCAT('%',#{record.moduleId},'%')
+                            </if>
+        
+        <if test="startTime != null">
+            <![CDATA[AND lc_page.start_time >= DATE(#{startTime})]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[AND lc_page.end_time <= DATE(#{endTime}]]>
+        </if>
+            <!--
+        <if test="search != null and search != ''">
+            OR lc_page.name LIKE CONCAT('%',#{search},'%')
+        </if>
+        -->
+                                    </select>
+</mapper>

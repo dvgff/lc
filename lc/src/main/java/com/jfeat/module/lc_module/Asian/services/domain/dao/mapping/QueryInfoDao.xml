@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfeat.module.lc_module.Asian.services.domain.dao.QueryInfoDao">
+                                                                                                                        <sql id="Base_Column_List">
+                                                                                                                                                                                                app_info.id, app_info.name, app_info.logo
+    </sql>
+
+    
+    
+    <select id="queryMasterModel" resultType="InfoModel">
+       SELECT app_info.*
+       FROM app_info
+       WHERE app_info.id=#{id}
+       GROUP BY app_info.id
+    </select>
+
+
+
+            
+    <select id="findInfoPage" resultType="InfoRecord" parameterType="InfoRecord">
+            SELECT <include refid="Base_Column_List"/>
+
+        
+
+        FROM app_info
+
+        
+        
+        WHERE 1=1
+        
+
+        
+                                                                            <if test="record.id != null and record.id>0 ">
+                                    AND app_info.id LIKE CONCAT('%',#{record.id},'%')
+                            </if>
+                                                                    <if test="record.name != null and record.name!= ''">
+                                    AND app_info.name LIKE CONCAT('%',#{record.name},'%')
+                            </if>
+                                                                    <if test="record.logo != null and record.logo!= ''">
+                                    AND app_info.logo LIKE CONCAT('%',#{record.logo},'%')
+                            </if>
+        
+        <if test="startTime != null">
+            <![CDATA[AND app_info.start_time >= DATE(#{startTime})]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[AND app_info.end_time <= DATE(#{endTime}]]>
+        </if>
+            <!--
+        <if test="search != null and search != ''">
+            OR app_info.name LIKE CONCAT('%',#{search},'%')
+        </if>
+        -->
+                                    </select>
+</mapper>
